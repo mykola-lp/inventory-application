@@ -1,0 +1,20 @@
+{
+  "name": "inventory-application",
+  "version": "1.0.0",
+  "description": "Alright! Let's flex our skills a little! The section was humongous, and you learned a *lot* of things. The only way to make it stick is to practice!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mykola-lp/inventory-application.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mykola-lp/inventory-application/issues"
+  },
+  "homepage": "https://github.com/mykola-lp/inventory-application#readme"
+}
