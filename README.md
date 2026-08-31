@@ -88,6 +88,56 @@ Open the app in your browser:
 http://localhost:3000
 ```
 
+## Database Schema
+
+The store sells horses, grouped by breed/category.
+
+### `categories`
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `INTEGER` (identity) | Primary key |
+| `name` | `VARCHAR(255)` | Breed/group name (e.g. "Arabian", "Draft") |
+| `description` | `TEXT` | Group description (optional) |
+
+### `items` (horses)
+
+| Field | Type | Description |
+|---|---|---|
+| `id` | `INTEGER` (identity) | Primary key |
+| `name` | `VARCHAR(255)` | Horse's name |
+| `category_id` | `INTEGER` (foreign key → `categories.id`) | Link to breed/category |
+| `age` | `INTEGER` | Age |
+| `sex` | `VARCHAR(20)` | Sex (mare/stallion/gelding) |
+| `height_hands` | `NUMERIC(4,1)` | Height in hands |
+| `color` | `VARCHAR(50)` | Coat color |
+| `price` | `NUMERIC(10,2)` | Price |
+| `description` | `TEXT` | Description/temperament |
+
+### Relations
+
+One-to-many: one `category` has many `items`. Each horse must belong to exactly one category; one category can contain many horses.
+
+```sql
+CREATE TABLE categories (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR(255) NOT NULL,
+  description TEXT
+);
+
+CREATE TABLE items (
+  id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  name VARCHAR(255) NOT NULL,
+  category_id INTEGER NOT NULL REFERENCES categories(id),
+  age INTEGER,
+  sex VARCHAR(20),
+  height_hands NUMERIC(4,1),
+  color VARCHAR(50),
+  price NUMERIC(10,2),
+  description TEXT
+);
+```
+
 ## Assignment
 
 1. Set up an Express project and a new PostgreSQL database.
