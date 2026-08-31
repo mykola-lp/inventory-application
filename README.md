@@ -10,11 +10,63 @@ Your Inventory app should have categories and items, so when the user goes to th
 
 ## Built With
 
+- Docker
 - Node.js
 - Express
 - EJS
 - PostgreSQL
 - node-postgres (pg)
+
+## Database Setup (PostgreSQL via Docker)
+
+This project uses PostgreSQL running in Docker, no global installation required.
+
+### Prerequisites
+- Docker and Docker Compose installed on your machine.
+
+**1. Create your `.env` file**
+
+Copy the example below into a new `.env` file in the project root:
+
+```env
+POSTGRES_USER=inventory_user
+POSTGRES_PASSWORD=inventory_pass
+POSTGRES_DB=inventory_app
+
+DATABASE_URL=postgresql://inventory_user:inventory_pass@localhost:5432/inventory_app
+```
+
+**2. Start the database**
+
+```bash
+docker compose up -d
+```
+
+Check that the container is healthy:
+
+```bash
+docker compose ps
+```
+
+**3. Connect to the database via psql (inside the container)**
+
+```bash
+docker compose exec postgres psql -U inventory_user -d inventory_app
+```
+
+OR **quick connection test:**
+
+```bash
+docker compose exec postgres psql -U inventory_user -d inventory_app -c "SELECT 1;"
+```
+
+**4. Stop the database**
+
+```bash
+docker compose down
+```
+
+Data persists in the `./pgdata` folder (bind mount) between restarts. To wipe all data, stop the container and delete `./pgdata`.
 
 ## Getting Started
 
