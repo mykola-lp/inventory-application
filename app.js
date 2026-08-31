@@ -3,7 +3,14 @@ const app = express();
 
 require('dotenv').config();
 
+const dbPool = require("./db/pool");
+
 app.get("/", (req, res) => res.send("Hello, world!"));
+
+// TEST
+dbPool.query("SELECT NOW()")
+  .then((result) => console.log("DB connected! Server time:", result.rows[0].now))
+  .catch((err) => console.error("DB connection error:", err));
 
 const PORT = process.env.PORT || 3000;
 
