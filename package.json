@@ -4,7 +4,8 @@
   "description": "Alright! Let's flex our skills a little! The section was humongous, and you learned a *lot* of things. The only way to make it stick is to practice!",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "dev": "node --watch app.js"
   },
   "repository": {
     "type": "git",
