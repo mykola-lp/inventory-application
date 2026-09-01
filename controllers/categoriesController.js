@@ -115,8 +115,43 @@ const categoryUpdatePost = [
 
 // --- DELETE ---
 
+async function categoryDeleteGet(req, res) {
+  const { id } = req.params;
+  const category = await db.getCategoryById(id);
+
+  if (!category) throw new CustomNotFoundError("Category not found");
+
+  const items = await db.getItemsByCategoryId(id);
+
+  res.render(
+    "category-delete", {
+      title: "Delete Category",
+      category,
+      items,
+    }
+  );
+}
+
 async function categoryDeletePost(req, res) {
-  res.send(`Category deleted: ${req.params.id}`);
+  const { id } = req.params;
+  const items = await db.getItemsByCategoryId(id);
+
+  if (items.length > 0) {
+    const category = await db.getCategoryById(id);
+
+    const data = {
+      title: "Delete Category",
+      category,
+      items,
+      error: "Cannot delete a category that still has horses in it. Remove or reassign them first.",
+    };
+
+    return res.status(400).render("category-delete", data);
+  }
+
+  await db.deleteCategoryById(id);
+
+  res.redirect("/");
 }
 
 module.exports = {
@@ -125,5 +160,6 @@ module.exports = {
   categoryCreatePost,
   categoryUpdateGet,
   categoryUpdatePost,
+  categoryDeleteGet,
   categoryDeletePost,
 };
