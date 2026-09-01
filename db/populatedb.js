@@ -3,6 +3,8 @@
 require("dotenv").config();
 const { Client } = require("pg");
 
+const { getSslConfig } = require("./ssl");
+
 const SQL = `
 CREATE TABLE IF NOT EXISTS categories (
   id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -88,7 +90,10 @@ async function main() {
     process.exit(1);
   }
 
-  const client = new Client({ connectionString });
+  const client = new Client({
+    connectionString,
+    ssl: getSslConfig(connectionString),
+  });
 
   await client.connect();
   await client.query(SQL);
