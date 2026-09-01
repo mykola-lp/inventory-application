@@ -1,7 +1,10 @@
 // controllers/categoriesController.js
-const db = require("../db/queries");
+const { body, validationResult } = require("express-validator");
 
+const db = require("../db/queries");
 const CustomNotFoundError = require("../errors/CustomNotFoundError");
+
+// --- DETAILS ---
 
 async function categoryDetailGet(req, res) {
   const { id } = req.params;
@@ -20,21 +23,97 @@ async function categoryDetailGet(req, res) {
   );
 }
 
+// --- CREATE ---
+
 async function categoryCreateGet(req, res) {
-  res.send("Category create form");
+  res.render(
+    "category-form", {
+      title: "New Category",
+      category: {},
+      errors: [],
+    }
+  );
 }
 
-async function categoryCreatePost(req, res) {
-  res.send("Category created");
-}
+const categoryCreatePost = [
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("Name is required")
+    .isLength({ max: 255 }),
+
+  body("description")
+    .trim()
+    .optional({ values: "falsy" }),
+
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const data = {
+        title: "New Category",
+        category: req.body,
+        errors: errors.array(),
+      };
+
+      return res.status(400).render("category-form", data);
+    }
+
+    const newCategory = await db.createCategory(req.body);
+
+    res.redirect(`/categories/${newCategory.id}`);
+  },
+];
+
+// --- UPDATE ---
 
 async function categoryUpdateGet(req, res) {
-  res.send(`Category update form: ${req.params.id}`);
+  const { id } = req.params;
+  const category = await db.getCategoryById(id);
+
+  if (!category) throw new CustomNotFoundError("Category not found");
+
+  res.render(
+    "category-form", {
+      title: "Edit Category",
+      category,
+      errors: [],
+    }
+  );
 }
 
-async function categoryUpdatePost(req, res) {
-  res.send(`Category updated: ${req.params.id}`);
-}
+const categoryUpdatePost = [
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage("Name is required")
+    .isLength({ max: 255 }),
+
+  body("description")
+    .trim()
+    .optional({ values: "falsy" }),
+
+  async (req, res) => {
+    const { id } = req.params;
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      const data = {
+        title: "Edit Category",
+        category: { ...req.body, id },
+        errors: errors.array(),
+      };
+
+      return res.status(400).render("category-form", data);
+    }
+
+    await db.updateCategory(id, req.body);
+
+    res.redirect(`/categories/${id}`);
+  },
+];
+
+// --- DELETE ---
 
 async function categoryDeletePost(req, res) {
   res.send(`Category deleted: ${req.params.id}`);
