@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+  </head>
+
+  <body>
+    <h1><%= title %></h1>
+
+    <% if (errors.length > 0) { %>
+      <ul style="color: red;">
+        <% errors.forEach(function(err) { %>
+          <li><%= err.msg %></li>
+        <% }); %>
+      </ul>
+    <% } %>
+
+    <form method="POST" action="<%= item.id ? `/items/${item.id}/update` : '/items/new' %>">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" value="<%= item.name || '' %>">
+
+      <label for="category_id">Category:</label>
+      <select id="category_id" name="category_id">
+        <% categories.forEach(function(cat) { %>
+          <option value="<%= cat.id %>" <%= String(item.category_id) === String(cat.id) ? 'selected' : '' %>>
+            <%= cat.name %>
+          </option>
+        <% }); %>
+      </select>
+
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" value="<%= item.age || '' %>">
+
+      <label for="sex">Sex:</label>
+      <input type="text" id="sex" name="sex" value="<%= item.sex || '' %>">
+
+      <label for="height_hands">Height (hands):</label>
+      <input type="number" step="0.1" id="height_hands" name="height_hands" value="<%= item.height_hands || '' %>">
+
+      <label for="color">Color:</label>
+      <input type="text" id="color" name="color" value="<%= item.color || '' %>">
+
+      <label for="price">Price:</label>
+      <input type="number" step="0.01" id="price" name="price" value="<%= item.price || '' %>">
+
+      <label for="description">Description:</label>
+      <textarea id="description" name="description"><%= item.description || '' %></textarea>
+
+      <button type="submit">Save</button>
+    </form>
+  </body>
+</html>
