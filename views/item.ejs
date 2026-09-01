@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+  </head>
+
+  <body>
+    <h1><%= item.name %></h1>
+
+    <p><strong>Age:</strong> <%= item.age %></p>
+    <p><strong>Sex:</strong> <%= item.sex %></p>
+    <p><strong>Height:</strong> <%= item.height_hands %> hands</p>
+    <p><strong>Color:</strong> <%= item.color %></p>
+    <p><strong>Price:</strong> $<%= item.price %></p>
+    <p><strong>Description:</strong> <%= item.description %></p>
+
+    <a href="/categories/<%= item.category_id %>">Back to category</a>
+  </body>
+</html>
