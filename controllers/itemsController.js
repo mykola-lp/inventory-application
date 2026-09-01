@@ -1,7 +1,20 @@
 // controllers/itemsController.js
+const db = require("../db/queries");
+
+const CustomNotFoundError = require("../errors/CustomNotFoundError");
 
 async function itemDetailGet(req, res) {
-  res.send(`Item detail: ${req.params.id}`);
+  const { id } = req.params;
+  const item = await db.getItemById(id);
+
+  if (!item) throw new CustomNotFoundError("Item not found");
+
+  res.render(
+    "item", {
+      title: item.name,
+      item: item,
+    }
+  );
 }
 
 async function itemCreateGet(req, res) {
