@@ -5,7 +5,13 @@ require('dotenv').config();
 
 const dbPool = require("./db/pool");
 
-app.get("/", (req, res) => res.send("Hello, world!"));
+const indexRouter = require("./routes/indexRouter");
+const categoriesRouter = require("./routes/categoriesRouter");
+const itemsRouter = require("./routes/itemsRouter");
+
+app.use("/", indexRouter);
+app.use("/categories", categoriesRouter);
+app.use("/items", itemsRouter);
 
 // TEST
 dbPool.query("SELECT NOW()")
