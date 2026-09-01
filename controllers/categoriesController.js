@@ -1,7 +1,23 @@
 // controllers/categoriesController.js
+const db = require("../db/queries");
+
+const CustomNotFoundError = require("../errors/CustomNotFoundError");
 
 async function categoryDetailGet(req, res) {
-  res.send(`Category detail: ${req.params.id}`);
+  const { id } = req.params;
+  const category = await db.getCategoryById(id);
+
+  if (!category) throw new CustomNotFoundError("Category not found");
+
+  const items = await db.getItemsByCategoryId(id);
+
+  res.render(
+    "category", {
+      title: category.name,
+      category: category,
+      items: items,
+    }
+  );
 }
 
 async function categoryCreateGet(req, res) {
