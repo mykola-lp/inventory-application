@@ -109,6 +109,20 @@ async function updateItem(id, { name, category_id, age, sex, height_hands, color
   return rows[0];
 }
 
+async function deleteCategoryById(id) {
+  await pool.query(
+    "DELETE FROM categories WHERE id = $1",
+    [id]
+  );
+}
+
+async function deleteItemById(id) {
+  await pool.query(
+    "DELETE FROM items WHERE id = $1",
+    [id]
+  );
+}
+
 module.exports = {
   getAllCategories,
   getCategoryById,
@@ -118,4 +132,6 @@ module.exports = {
   updateCategory,
   createItem,
   updateItem,
+  deleteCategoryById,
+  deleteItemById,
 };
