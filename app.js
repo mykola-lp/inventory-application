@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 
+const path = require("node:path");
 require('dotenv').config();
 
 const dbPool = require("./db/pool");
@@ -8,6 +9,9 @@ const dbPool = require("./db/pool");
 const indexRouter = require("./routes/indexRouter");
 const categoriesRouter = require("./routes/categoriesRouter");
 const itemsRouter = require("./routes/itemsRouter");
+
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "ejs");
 
 app.use("/", indexRouter);
 app.use("/categories", categoriesRouter);
