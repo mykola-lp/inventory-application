@@ -54,7 +54,7 @@ docker compose ps
 docker compose exec postgres psql -U inventory_user -d inventory_app
 ```
 
-OR **quick connection test:**
+or **quick connection test:**
 
 ```bash
 docker compose exec postgres psql -U inventory_user -d inventory_app -c "SELECT 1;"
@@ -67,6 +67,34 @@ docker compose down
 ```
 
 Data persists in the `./pgdata` folder (bind mount) between restarts. To wipe all data, stop the container and delete `./pgdata`.
+
+## Seeding the Database
+
+Dummy data (categories and horses) is added via a script: `db/populatedb.js`. The script creates the tables if they don't exist yet, clears any existing rows (`TRUNCATE ... RESTART IDENTITY CASCADE`), and inserts fresh sample data — safe to run multiple times, on an empty database or one that already has data.
+
+**Run it locally** (uses `DATABASE_URL` from your `.env` file):
+
+```bash
+npm run seed
+```
+
+This is equivalent to running:
+
+```bash
+node db/populatedb.js
+```
+
+**Run it against a different database** (e.g. production), by passing a connection string directly — this overrides `.env`:
+
+```bash
+node db/populatedb.js "postgresql://prod_user:prod_pass@prod-host.render.com:5432/prod_db"
+```
+
+**Verify the data was inserted:**
+
+```bash
+docker compose exec postgres psql -U inventory_user -d inventory_app -c "SELECT COUNT(*) FROM categories;"
+```
 
 ## Getting Started
 
