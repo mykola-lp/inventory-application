@@ -186,8 +186,25 @@ const itemUpdatePost = [
 
 // --- DELETE ---
 
+async function itemDeleteGet(req, res) {
+  const { id } = req.params;
+  const item = await db.getItemById(id);
+
+  if (!item) throw new CustomNotFoundError("Item not found");
+
+  res.render(
+    "item-delete", {
+      title: "Delete Horse",
+      item,
+    }
+  );
+}
+
 async function itemDeletePost(req, res) {
-  res.send(`Item deleted: ${req.params.id}`);
+  const { id } = req.params;
+  await db.deleteItemById(id);
+
+  res.redirect("/");
 }
 
 module.exports = {
@@ -196,5 +213,6 @@ module.exports = {
   itemCreatePost,
   itemUpdateGet,
   itemUpdatePost,
+  itemDeleteGet,
   itemDeletePost,
 };
