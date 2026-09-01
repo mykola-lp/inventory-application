@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+  </head>
+
+  <body>
+    <h1>Delete "<%= item.name %>"?</h1>
+
+    <form method="POST" action="/items/<%= item.id %>/delete">
+      <button type="submit">Confirm delete</button>
+    </form>
+
+    <a href="/items/<%= item.id %>">Cancel</a>
+  </body>
+</html>
